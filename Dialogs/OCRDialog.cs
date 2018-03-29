@@ -44,7 +44,11 @@ namespace UKDriverLicenceOCRBot
                 await context.PostAsync(busy);
 
                 var ocrRespones = await ComputerVision.GetOCRResult(uri);
-                if (ocrRespones != null)
+                if (ocrRespones == null)
+                {
+                    await context.PostAsync($"I didn't like that one, try another.");
+                }
+                else
                 {
                     var lineContent = new List<string>();
                     foreach (var line in ocrRespones.Regions.SelectMany(l => l.Lines))
